@@ -34,26 +34,25 @@ class GameLogic:
             return score
 
         # if the dice results come back as these combos return the scores below
-        if all(d in dice for d in [1, 2, 3, 4, 5, 6]):
+
+        elif all(d in dice for d in [1, 2, 3, 4, 5, 6]):
             score = 1500
         elif all(d in dice for d in [2, 2, 3, 3, 4, 6]):
             score = 0
         elif all(d in dice for d in [2, 2, 3, 3, 6, 6]):
             score = 1500
-        elif all(d in dice for d in [1, 1, 1, 2, 2, 2]):
-            score = 1200
         else:
 
 
         # Checking if ones are in the results and adding the score based on how much are present
-            if counter[1] == 1:
-                score += 100
-
-            if counter[1] == 2:
-                score += 200
-
             if counter[1] == 3:
                 score += 1000
+            else:
+                if counter[1] == 1:
+                    score += 100
+
+                if counter[1] == 2:
+                    score += 200
 
             if counter[1] == 4:
                 score += 2000
@@ -65,7 +64,6 @@ class GameLogic:
                 score += 4000
 
         # # Checking if twos are in the results and adding the score based on how much are present
-
             if counter[2] == 4:
                 score += 400
 
@@ -76,7 +74,6 @@ class GameLogic:
                 score += 800
 
         # # Checking if threes are in the results and adding the score based on how much are present
-
             if counter[3] == 4:
                 score += 600
 
@@ -87,6 +84,10 @@ class GameLogic:
                 score += 1200
 
         # Checking if fours are in the results and adding the score based on how much are present
+
+            if counter[3] == 1:
+                score += 0
+
             if counter[4] == 4:
                 score += 800
 
@@ -97,10 +98,14 @@ class GameLogic:
                 score += 1600
 
         # Checking if fives are in the results and adding the score based on how much are present
+            if counter[5] == 1:
+                score += 50
+
+            if counter[5] == 2:
+                score += 100
+
             if counter[5] == 3:
                 score += 500
-                counter[5] -= 3
-            score += counter[5] * 50
 
             if counter[5] == 4:
                 score += 1000
@@ -133,7 +138,7 @@ class GameLogic:
 
 if __name__ == '__main__':
     game = GameLogic()
-    dice_results = game.roll_dice(6)
+    dice_results = game.roll_dice()
     print("Dice rolls:", dice_results)
     score = game.calculate_score(dice_results)
     print("Dice rolls:", dice_results)
