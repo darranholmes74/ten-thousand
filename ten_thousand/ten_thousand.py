@@ -1,7 +1,40 @@
 import random
 from collections import Counter
 
-scoring_combinations = [((1, 1, 1), 1000), ((1, 1, 1, 1), 2000)]
+
+
+class DiceGame:
+    TARGET_SCORE = 10000
+
+    def play_dice(self):
+        player_rolls = []
+        score = 0
+        round_num = 1
+        num_dice = 6
+        print("Welcome to Ten Thousand")
+        print("(y)es to play or (n)o to decline")
+        player_choice = input("> ")
+        if player_choice.lower() == "n":
+            print("Thanks for playing")
+        elif player_choice.lower() == "y":
+            while score < DiceGame.TARGET_SCORE:
+                print(f"Starting round {round_num}")
+                print(f"Rolling {num_dice} dice ")
+                dice_results = GameLogic.roll_dice(num_dice)
+                print(dice_results)
+                player_choice = input("> ")
+                player_rolls = [int(x) for x in player_choice.split(',')] if player_choice else []
+                player_rolls_tuple = tuple(player_rolls)
+                if len(player_rolls_tuple) < num_dice:
+                    num_dice -= len(player_rolls_tuple)
+                round_score = GameLogic.calculate_score(player_rolls_tuple)
+                if not player_rolls:
+                    round_score = 0
+                score += round_score
+                print(f"You picked {player_rolls} for a score of {round_score} and your total score is {score}")
+                round_num += 1
+
+            print(f"Congratulations! You scored {score} and won the game!")
 
 
 class GameLogic:
@@ -137,9 +170,11 @@ class GameLogic:
 
 
 if __name__ == '__main__':
+    play = DiceGame()
+    play_game = play.play_dice()
     game = GameLogic()
-    dice_results = game.roll_dice()
+    dice_results = game.roll_dice(6)
     print("Dice rolls:", dice_results)
     score = game.calculate_score(dice_results)
     print("Dice rolls:", dice_results)
-    print("Score:", score)
+    # print("Score:", score)
