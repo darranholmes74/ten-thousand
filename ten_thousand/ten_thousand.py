@@ -1,11 +1,15 @@
 import random
 from collections import Counter
-
+from sys import exit
 
 class DiceGame:
     TARGET_SCORE = 10000
+    def quit_game(self, message):
+        exit(message)
 
     def play_dice(self):
+        round_rolls = []
+        bank_score = []
         score = 0
         round_num = 1
         num_dice = 6
@@ -18,11 +22,27 @@ class DiceGame:
             while score < DiceGame.TARGET_SCORE:
                 print(f"Starting round {round_num}")
                 print(f"Rolling {num_dice} dice ")
+                print('(r)oll again, (b)ank your points or (q)uit:')
                 dice_results = GameLogic.roll_dice(num_dice)
                 print(dice_results)
                 player_choice = input("> ")
+                if player_choice.lower() == 'b':
+                    bank_score.append(score)
+                    # score = 0
+                    # num_dice = 6
+                    # round_rolls = []
+                    print(f"You banked {sum(bank_score)} points")
+                    print(f"Your total score is now {score + sum(bank_score)}")
+                elif player_choice.lower() == 'q':
+                    self.quit_game(f"Thanks for playing. You earned {bank_score} points")
+                elif player_choice.lower() == 'r':
+                    continue
                 player_rolls = [int(x) for x in player_choice.split(',')] if player_choice else []
+                round_rolls += player_rolls
                 player_rolls_tuple = tuple(player_rolls)
+                if len(player_choice) > len(player_rolls_tuple):
+                    print('Cheater!!! Or possibly made a typo...')
+                    continue
                 if len(player_rolls_tuple) < num_dice:
                     num_dice -= len(player_rolls_tuple)
                 round_score = GameLogic.calculate_score(player_rolls_tuple)
@@ -30,6 +50,8 @@ class DiceGame:
                     round_score = 0
                 score += round_score
                 print(f"You picked {player_rolls} for a score of {round_score} and your total score is {score}")
+                print(f"All dice {round_rolls}")
+                print(f"Banked score is {bank_score}")
                 round_num += 1
 
             print(f"Congratulations! You scored {score} and won the game!")
@@ -168,6 +190,10 @@ class GameLogic:
 
 
 if __name__ == '__main__':
+    try:
+        DiceGame()
+    except KeyboardInterrupt:
+        quit_game('CtrlCDetected!')
     play = DiceGame()
     play_game = play.play_dice()
     game = GameLogic()
