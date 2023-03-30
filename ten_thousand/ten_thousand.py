@@ -2,12 +2,10 @@ import random
 from collections import Counter
 
 
-
 class DiceGame:
     TARGET_SCORE = 10000
 
     def play_dice(self):
-        player_rolls = []
         score = 0
         round_num = 1
         num_dice = 6
